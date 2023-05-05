@@ -15,10 +15,10 @@ Download that latest release from [Releases](https://github.com/SimenNielsen/SQL
 
 ## Usage
 To use the SQL Procedure Parser, you need to provide the following parameters:
-0. .sql file containing the valid SQL Server query.
-1. Default schema for your database.
-2. Database relevant for the query.
-3. Path to output .json file.
+1. .sql file containing the valid SQL Server query.
+2. Default schema for your database.
+3. Database relevant for the query.
+4. Path to output .json file.
 
 Example:
 ```
