@@ -20,8 +20,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore ./StoredProcedureParser/StoredProcedureParser.sln
+      run: dotnet restore ./SQLQueryLineage/SQLQueryLineage.sln
     - name: Build
-      run: dotnet build ./StoredProcedureParser/StoredProcedureParser.csproj --no-restore 
+      run: dotnet build ./SQLQueryLineage/SQLQueryLineage.csproj --no-restore 
     - name: Test
-      run: dotnet test --verbosity normal ./StoredProcedureParser/StoredProcedureParser.sln
+      run: dotnet test --verbosity normal ./SQLQueryLineage/SQLQueryLineage.sln
