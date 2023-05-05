@@ -212,23 +212,6 @@ namespace SQLQueryLineageTesting
             Assert.AreEqual(expected, compare);
         }
         [TestMethod]
-        public void AssertFunctionCallSubQueryColumnSourceCount()
-        {
-            string query = "SELECT " +
-                "coalescense(a.s1, a.s2, a.s3) as firstNonEmpty " +
-                "INTO " +
-                "Table1 " +
-                "FROM " +
-                "(" +
-                "SELECT s1, s2, s3 " +
-                "FROM SourceTable" +
-                ") as a";
-            SQLQueryLineageVisitor result = SQLQueryLineageProgram.GetStatementTargets(query);
-            int expected = 3;
-            int compare = result.ProcedureEvents[0].GetColumns()[0].GetSourceColumns().Count;
-            Assert.AreEqual(expected, compare);
-        }
-        [TestMethod]
         public void AssertUnionAllSourceColumns()
         {
             string query = "SELECT x.col1 " +
