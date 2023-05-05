@@ -1,7 +1,7 @@
 # SQL Procedure Parser
 ![.NET Workflow](https://github.com/SimenNielsen/SQLQueryLineage/actions/workflows/dotnet.yml/badge.svg)
 
-This project is a .NET console application that parses SQL stored procedures and generates column-level lineage in JSON format. The tool extracts information from the stored procedures and outputs a JSON file that contains information about the columns and their dependencies.
+This project is a .NET console application that parses MS SQL stored procedures and generates column-level lineage in JSON format. The tool extracts information from the stored procedures and outputs a JSON file that contains information about the columns and their dependencies.
 
 ## Table of Contents
 - Installation
@@ -19,6 +19,13 @@ To use the SQL Procedure Parser, you need to provide the following parameters:
 2. Default schema for your database.
 3. Database relevant for the query.
 4. Path to output .json file.
+
+The json contains a list of events found in a specified file. Event types are:
+* SELECT = 1
+* SELECT INTO = 2
+* INSERT = 3
+* UPDATE = 4
+* EXECUTE = 5
 
 Example:
 ```
@@ -43,7 +50,7 @@ BEGIN
     WHERE o.id = @order_id
 END
 ```
-### output
+### Output
 ```
 {
   "ProcedureEvents": [
