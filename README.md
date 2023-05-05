@@ -32,6 +32,7 @@ Some queries require a connection string to the query database, e.g. when the up
 - SOURCE_PORT
 - SOURCE_USER
 - SOURCE_PASS
+<br>
 To set environment variables in Windows Powershell: ```$env:SOURCE_HOST="localhost"```.
 
 Example:
