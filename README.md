@@ -27,6 +27,13 @@ The json contains a list of events found in a specified file. Event types are:
 * UPDATE = 4
 * EXECUTE = 5
 
+Some queries require a connection string to the query database, e.g. when the upstream is unclear when column alias is not mentioned. To allow connection to a specific database we need to set these 4 environment variables:
+- SOURCE_HOST
+- SOURCE_PORT
+- SOURCE_USER
+- SOURCE_PASS
+To set environment variables in Windows Powershell: ```$env:SOURCE_HOST="localhost"```.
+
 Example:
 ```
 SQL_Procedure_Parser.exe "./udp_please_parse_me.sql" "dbo" "TestDB" "C:\Temp\Testing\out.json"
