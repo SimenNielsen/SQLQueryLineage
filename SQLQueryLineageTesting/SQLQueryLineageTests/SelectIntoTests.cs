@@ -227,7 +227,7 @@ namespace SQLQueryLineageTesting
         [TestMethod]
         public void AssertStoredProcedureSample1()
         {
-            string path = @"..\..\..\Scripts\sp_sample1.sql";
+            string path = @"Scripts\sp_sample1.sql";
             string query = File.ReadAllText(path);
             SQLQueryLineageVisitor result = SQLQueryLineageProgram.GetStatementTargets(query);
             Assert.AreEqual("humanresources", result.ProcedureEvents[0].GetTarget().schemaName);
@@ -237,7 +237,7 @@ namespace SQLQueryLineageTesting
         [TestMethod]
         public void AssertStoredProcedureSample2()
         {
-            string path = @"..\..\..\Scripts\sp_sample2.sql";
+            string path = @"Scripts\sp_sample2.sql";
             string query = File.ReadAllText(path);
             SQLQueryLineageVisitor result = SQLQueryLineageProgram.GetStatementTargets(query);
             Assert.AreEqual("#collectionstartdates", result.ProcedureEvents[0].GetTarget().tableName);
@@ -247,7 +247,7 @@ namespace SQLQueryLineageTesting
         [TestMethod]
         public void AssertCTETest1()
         {
-            string path = @"..\..\..\Scripts\CTE_test_1.sql";
+            string path = @"Scripts\CTE_test_1.sql";
             string query = File.ReadAllText(path);
             SQLQueryLineageVisitor result = SQLQueryLineageProgram.GetStatementTargets(query);
             Assert.AreEqual("#temp", result.ProcedureEvents[0].GetTarget().tableName);
