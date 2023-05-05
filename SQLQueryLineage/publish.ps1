@@ -1,0 +1,1 @@
+dotnet publish -c release -r win-x86 --self-contained
