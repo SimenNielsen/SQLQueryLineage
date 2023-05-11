@@ -1,4 +1,4 @@
-# SQL Procedure Parser
+# SQL Query Lineage
 ![.NET Workflow](https://github.com/SimenNielsen/SQLQueryLineage/actions/workflows/dotnet.yml/badge.svg)
 
 This project is a .NET console application that parses MS SQL stored procedures and generates column-level lineage in JSON format. The tool extracts information from the stored procedures and outputs a JSON file that contains information about the columns and their dependencies.
