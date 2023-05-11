@@ -1,15 +1,11 @@
 ﻿using SQLQueryLineage.Common;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
-using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog.Extensions.Logging;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 using SQLQueryLineage.cli;
 
 namespace SQLQueryLineage;
