@@ -1,23 +1,52 @@
 ﻿using SQLQueryLineage.Common;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Serilog;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog.Extensions.Logging;
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using SQLQueryLineage.cli;
 
 namespace SQLQueryLineage;
 public static class SQLQueryLineageProgram
 {
-    static void Main(string[] args)
+    private static async Task<int> Main(string[] args)
     {
-        //file path is first argument
-        string path = args[0];
-        // default schema is second argument
-        string defaultSchema = args[1];
-        // default database is third argument
-        string defaultDatabase = args[2];
-        string outputFilePath = args[3];
-        //read file contents
-        string query = File.ReadAllText(path);
-        var parseResult = GetStatementTargets(query, defaultSchema, defaultDatabase);
-        File.WriteAllText(outputFilePath, JsonConvert.SerializeObject(parseResult));
+        var Configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile(AppDomain.CurrentDomain.BaseDirectory + "\\appsettings.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables()
+            .Build();
+
+        Log.Logger = new LoggerConfiguration()
+               .ReadFrom.Configuration(Configuration)
+               .Enrich.FromLogContext()
+               .CreateLogger();
+
+        var builder = new HostBuilder()
+            .ConfigureServices((hostContext, services) =>
+            {
+                services.AddLogging(config =>
+                {
+                    config.ClearProviders();
+                    config.AddProvider(new SerilogLoggerProvider(Log.Logger));
+                });
+            });
+
+        try
+        {
+            return await builder.RunCommandLineApplicationAsync<SqlLineageCmd>(args);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return 1;
+        }
     }
 
     public static SQLQueryLineageVisitor GetStatementTargets(string storedProcedureDefinition, string defaultSchema = "dbo", string defaultDatabase = "master", bool isLinkedServer = false)

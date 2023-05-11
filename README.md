@@ -14,11 +14,12 @@ This project is a .NET console application that parses MS SQL stored procedures 
 Download that latest release from [Releases](https://github.com/SimenNielsen/SQL_Procedure_Parser/releases).
 
 ## Usage
-To use the SQL Procedure Parser, you need to provide the following parameters:
-1. .sql file containing the valid SQL Server query.
-2. Default schema for your database.
-3. Database relevant for the query.
-4. Path to output .json file.
+Sample usage:
+```
+sqllineage parse -file="D:\dev\sp_sample2.sql" -schema=testschema -database=testdb -output-file="C:\Users\Simen\Documents\test.json"
+```
+
+Will parse the file specified with the -file parameter and output the result to the file specified with the -output-file parameter. The -schema and -database parameters are optional and will default to dbo and master respectively.
 
 The json contains a list of events found in a specified file. Event types are:
 * SELECT = 1
