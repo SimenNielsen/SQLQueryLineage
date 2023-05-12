@@ -129,12 +129,7 @@ END
           "upstreamReferenceAlias": "o"
         }
       ],
-      "Target": {
-        "alias": null,
-        "tableName": "#order_info",
-        "schemaName": "dbo",
-        "databaseName": "testdb"
-      }
+      "Target": null
     }
   ]
 }
