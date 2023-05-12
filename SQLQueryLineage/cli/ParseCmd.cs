@@ -34,17 +34,16 @@ namespace SQLQueryLineage.cli
             try
             {
                 ValidateOptions();
+                string query = File.ReadAllText(FilePath);
+                var parseResult = SQLQueryLineageProgram.GetStatementTargets(query, Schema, Database);
+                File.WriteAllText(OutputFilePath, JsonConvert.SerializeObject(parseResult));
+                return Task.FromResult(0);
             }
             catch (Exception ex)
             {
                 OnException(ex);
                 return Task.FromResult(1);
             }
-            string query = File.ReadAllText(FilePath);
-            var parseResult = SQLQueryLineageProgram.GetStatementTargets(query, Schema, Database);
-            File.WriteAllText(OutputFilePath, JsonConvert.SerializeObject(parseResult));
-            return Task.FromResult(0);
         }
-
     }
 }
