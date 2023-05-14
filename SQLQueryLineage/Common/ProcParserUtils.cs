@@ -673,4 +673,46 @@ public static class ProcParserUtils {
                 throw new NotSupportedException($"InsertSource type not supported: {source.GetType().Name}");
         }
     }
+    public static List<Column> GetColumnOrigins(List<Column> sourceColumns)
+    {
+        var result = new List<Column>();
+        foreach (var col in sourceColumns)
+        {
+            if(col.name != null)
+            {
+                if (col.GetSourceColumns().Any())
+                {
+                    result.AddRange(GetColumnOrigins(col.GetSourceColumns()));
+                    col.SetSourceColumns(new List<Column>());
+                }
+                if(col.tableAlias != null)
+                {
+                    result.Add(col);
+                }
+            }
+        }
+        return result;
+    }
+    public static List<ProcedureStatement> CompressLineage(List<ProcedureStatement> events)
+    {
+        foreach (var statement in events)
+        {
+            switch (statement.Type)
+            {
+                case ProcedureStatementType.SELECT:
+                case ProcedureStatementType.SELECT_INTO:
+                case ProcedureStatementType.INSERT:
+                case ProcedureStatementType.UPDATE:
+                    foreach (var col in statement.GetColumns())
+                    {
+                        var origins = GetColumnOrigins(col.GetSourceColumns());
+                        col.SetSourceColumns(origins);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return events;
+    }
 }

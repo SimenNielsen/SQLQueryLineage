@@ -1,6 +1,7 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using SQLQueryLineage.Common;
 
 namespace SQLQueryLineage.cli
 {
@@ -15,6 +16,8 @@ namespace SQLQueryLineage.cli
         public string Database { get; set; } = "master";
         [Option(CommandOptionType.SingleValue, ShortName = "s", LongName = "schema", Description = "default schema", ValueName = "default schema", ShowInHelpText = true)]
         public string Schema { get; set; } = "dbo";
+        [Option(CommandOptionType.NoValue, ShortName = "c", LongName = "compress", Description = "compress the lineage", ValueName = "compress lineage", ShowInHelpText = true)]
+        public bool Compress { get; set; } = false;
 
         public ParseCmd(ILogger<ParseCmd> logger, IConsole console)
         {
@@ -35,7 +38,11 @@ namespace SQLQueryLineage.cli
             {
                 ValidateOptions();
                 string query = File.ReadAllText(FilePath);
-                var parseResult = SQLQueryLineageProgram.GetStatementTargets(query, Schema, Database);
+                var parseResult = SQLQueryLineageProgram.GetStatementTargets(query, defaultSchema: Schema, defaultDatabase: Database);
+                if(Compress == true)
+                {
+                    ProcParserUtils.CompressLineage(parseResult.ProcedureEvents);
+                }
                 File.WriteAllText(OutputFilePath, JsonConvert.SerializeObject(parseResult));
                 return Task.FromResult(0);
             }

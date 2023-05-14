@@ -45,7 +45,10 @@ public static class SQLQueryLineageProgram
         }
     }
 
-    public static SQLQueryLineageVisitor GetStatementTargets(string storedProcedureDefinition, string defaultSchema = "dbo", string defaultDatabase = "master", bool isLinkedServer = false)
+    public static SQLQueryLineageVisitor GetStatementTargets(string storedProcedureDefinition, 
+        string defaultSchema = "dbo", 
+        string defaultDatabase = "master", 
+        bool isLinkedServer = false)
     {
         ProcParserUtils.defaultDatabase = defaultDatabase;
         ProcParserUtils.defaultSchema = defaultSchema;
