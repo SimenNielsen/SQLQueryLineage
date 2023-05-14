@@ -5,6 +5,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<RuntimeIdentifier>win7-x64</RuntimeIdentifier>
+	<LangVersion>latest</LangVersion>
+	<AssemblyName>sqllineage</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
