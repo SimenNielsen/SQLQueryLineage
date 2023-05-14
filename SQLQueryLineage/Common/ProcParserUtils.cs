@@ -192,7 +192,10 @@ public static class ProcParserUtils {
             if (relevantUpstream.type == UpstreamType.QUERY)
             {
                 var sourceCol = relevantUpstream.query.transformColumns.FirstOrDefault(c => c.alias == column.name);
-                column.AddSourceColumn(sourceCol);
+                if(sourceCol != null && column.GetSourceColumns().Count == 0)
+                {
+                    column.AddSourceColumn(sourceCol);
+                }
             }
             else
             {
