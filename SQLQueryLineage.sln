@@ -3,18 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLQueryLineage", "SQLQueryLineage.csproj", "{B9AB6854-0836-47FA-B52C-5E1CA44610CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLQueryLineage", ".\SQLQueryLineage\SQLQueryLineage.csproj", "{B9AB6854-0836-47FA-B52C-5E1CA44610CD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLQueryLineageTesting", "..\SQLQueryLineageTesting\SQLQueryLineageTesting.csproj", "{22107334-28C7-4543-AE20-E4DEE506B376}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLQueryLineageTesting", ".\SQLQueryLineageTesting\SQLQueryLineageTesting.csproj", "{22107334-28C7-4543-AE20-E4DEE506B376}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9CA876E7-B700-4256-A0B0-7EA03DB3156D}"
 	ProjectSection(SolutionItems) = preProject
 		..\.github\workflows\dotnet.yml = ..\.github\workflows\dotnet.yml
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLQueryLineageCLI", "..\SQLQueryLineageCLI\SQLQueryLineageCLI.csproj", "{CC8D981F-5A03-4C7C-9816-BB5CA336FBA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLQueryLineageCLI", ".\SQLQueryLineageCLI\SQLQueryLineageCLI.csproj", "{CC8D981F-5A03-4C7C-9816-BB5CA336FBA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLQueryLineageWebAPI", "..\SQLQueryLineageWebAPI\SQLQueryLineageWebAPI.csproj", "{B38921AC-1A82-4DB8-A403-93F9031D0033}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLQueryLineageWebAPI", ".\SQLQueryLineageWebAPI\SQLQueryLineageWebAPI.csproj", "{B38921AC-1A82-4DB8-A403-93F9031D0033}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
