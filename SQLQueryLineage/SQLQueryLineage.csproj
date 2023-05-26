@@ -1,25 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<RuntimeIdentifier>win7-x64</RuntimeIdentifier>
 	<LangVersion>latest</LangVersion>
-	<AssemblyName>sqllineage</AssemblyName>
+	<RuntimeIdentifier>win7-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
-    <PackageReference Include="McMaster.Extensions.Hosting.CommandLine" Version="4.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+    
     <PackageReference Include="Microsoft.SqlServer.TransactSql.ScriptDom" Version="150.4897.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="7.0.0" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="7.0.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 

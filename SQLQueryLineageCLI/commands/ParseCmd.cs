@@ -1,9 +1,10 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using SQLQueryLineage;
 using SQLQueryLineage.Common;
 
-namespace SQLQueryLineage.cli
+namespace SQLQueryLineageCLI.Commands
 {
     [Command(Name = "parse", Description = "Parse sql file and output to json file")]
     class ParseCmd : BaseCmd

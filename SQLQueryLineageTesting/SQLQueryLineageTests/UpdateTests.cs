@@ -1,7 +1,7 @@
 ﻿using SQLQueryLineage;
 using SQLQueryLineage.Common;
 
-namespace SQLQueryLineageTesting
+namespace SQLQueryLineageTesting.SQLQueryLineageTests
 {
     [TestClass]
     public class UpdateTests

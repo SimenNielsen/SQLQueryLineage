@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 
-namespace SQLQueryLineage.cli
+namespace SQLQueryLineageCLI.Commands
 {
     [Command(Name = "sqllineage", OptionsComparison = System.StringComparison.InvariantCultureIgnoreCase)]
     [VersionOptionFromMember("--version", MemberName = nameof(GetVersion))]

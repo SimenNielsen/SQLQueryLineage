@@ -1,6 +1,6 @@
 ﻿using SQLQueryLineage;
 
-namespace SQLQueryLineageTesting
+namespace SQLQueryLineageTesting.SQLQueryLineageTests
 {
     [TestClass]
     public class SelectTests

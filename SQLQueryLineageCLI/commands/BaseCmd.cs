@@ -1,7 +1,7 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 
-namespace SQLQueryLineage.cli
+namespace SQLQueryLineageCLI.Commands
 {
     [HelpOption("--help")]
     abstract class BaseCmd

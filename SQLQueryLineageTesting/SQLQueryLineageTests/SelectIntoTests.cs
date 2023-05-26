@@ -1,11 +1,11 @@
 ﻿using SQLQueryLineage;
 
-namespace SQLQueryLineageTesting
+namespace SQLQueryLineageTesting.SQLQueryLineageTests
 {
     [TestClass]
     public class SelectIntoTests
     {
-        public SelectIntoTests() {}
+        public SelectIntoTests() { }
         [TestMethod]
         public void AssertNonEmptyOnSelectInto()
         {
@@ -99,7 +99,7 @@ namespace SQLQueryLineageTesting
                 "Table1 " +
                 "FROM " +
                 "Students";
-            SQLQueryLineageVisitor result = SQLQueryLineageProgram.GetStatementTargets(query, defaultSchema:"dbo");
+            SQLQueryLineageVisitor result = SQLQueryLineageProgram.GetStatementTargets(query, defaultSchema: "dbo");
             string expected = "dbo";
             string compare = result.ProcedureEvents[0].GetColumns()[0].tableAlias.schemaName;
             Assert.AreEqual(expected, compare);
