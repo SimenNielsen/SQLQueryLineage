@@ -1,4 +1,5 @@
 ﻿using SQLQueryLineage;
+using SQLQueryLineage.Common;
 
 namespace SQLQueryLineageTesting.SQLQueryLineageTests
 {
@@ -99,7 +100,8 @@ namespace SQLQueryLineageTesting.SQLQueryLineageTests
                 "Table1 " +
                 "FROM " +
                 "Students";
-            SQLQueryLineageVisitor result = SQLQueryLineageProgram.GetStatementTargets(query, defaultSchema: "dbo");
+            ParserProperties prop = new ParserProperties() { defaultSchema = "dbo" };
+            SQLQueryLineageVisitor result = SQLQueryLineageProgram.GetStatementTargets(query, prop);
             string expected = "dbo";
             string compare = result.ProcedureEvents[0].GetColumns()[0].tableAlias.schemaName;
             Assert.AreEqual(expected, compare);
@@ -113,7 +115,8 @@ namespace SQLQueryLineageTesting.SQLQueryLineageTests
                 "Table1 " +
                 "FROM " +
                 "testschema.Students";
-            SQLQueryLineageVisitor result = SQLQueryLineageProgram.GetStatementTargets(query, defaultDatabase: "dbo");
+            ParserProperties prop = new ParserProperties() { defaultSchema = "dbo" };
+            SQLQueryLineageVisitor result = SQLQueryLineageProgram.GetStatementTargets(query, prop);
             string expected = "testschema";
             string compare = result.ProcedureEvents[0].GetColumns()[0].tableAlias.schemaName;
             Assert.AreEqual(expected, compare);

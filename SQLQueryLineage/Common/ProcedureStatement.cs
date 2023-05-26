@@ -2,9 +2,9 @@
 
 public class ProcedureStatement
 {
-    public ProcedureStatementType Type;
-    public List<Column> Columns;
-    public TableAlias Target;
+    public ProcedureStatementType Type { get; set; }
+    public List<Column> Columns { get; set; }
+    public TableAlias Target { get; set; }
     public ProcedureStatement(ProcedureStatementType type)
     {
         this.Type = type;

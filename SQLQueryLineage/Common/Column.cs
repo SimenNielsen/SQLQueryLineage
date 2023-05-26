@@ -2,12 +2,12 @@
 {
     public class Column
     {
-        public string name;
-        public string alias;
-        public TableAlias tableAlias;
-        public string? logic;
-        public List<Column> sourceColumns;
-        public string? upstreamReferenceAlias;
+        public string name { get; set; }
+        public string alias { get; set; }
+        public TableAlias tableAlias { get; set; }
+        public string? logic { get; set; }
+        public List<Column> sourceColumns { get; set; }
+        public string? upstreamReferenceAlias { get; set; }
 
         public Column(string name, string? alias = null, string? logic = null, TableAlias tableAlias = null)
         {

@@ -4,14 +4,13 @@ using Microsoft.SqlServer.TransactSql.ScriptDom;
 namespace SQLQueryLineage;
 public static class SQLQueryLineageProgram
 {
-    public static SQLQueryLineageVisitor GetStatementTargets(string storedProcedureDefinition, 
-        string defaultSchema = "dbo", 
-        string defaultDatabase = "master", 
-        bool isLinkedServer = false)
+    public static SQLQueryLineageVisitor GetStatementTargets(string storedProcedureDefinition,
+        ParserProperties properties = null)
     {
-        ProcParserUtils.defaultDatabase = defaultDatabase;
-        ProcParserUtils.defaultSchema = defaultSchema;
-        if (isLinkedServer == true)
+        if(properties == null) properties = new ParserProperties(); //default properties
+        ProcParserUtils.defaultDatabase = properties.defaultDatabase;
+        ProcParserUtils.defaultSchema = properties.defaultSchema;
+        if (properties.isLinkedServer == true)
         {
             storedProcedureDefinition = storedProcedureDefinition.ToLower().Replace("$system", "system");
         }
