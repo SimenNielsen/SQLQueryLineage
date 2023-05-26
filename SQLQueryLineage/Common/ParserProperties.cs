@@ -11,5 +11,6 @@ namespace SQLQueryLineage.Common
         public string defaultSchema { get; set; } = "dbo";
         public string defaultDatabase { get; set; } = "master";
         public bool isLinkedServer { get; set; } = false;
+        public bool compress { get; set; } = false;
     }
 }

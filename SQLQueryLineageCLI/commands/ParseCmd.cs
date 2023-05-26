@@ -19,6 +19,8 @@ namespace SQLQueryLineageCLI.Commands
         public string Schema { get; set; } = "dbo";
         [Option(CommandOptionType.NoValue, ShortName = "c", LongName = "compress", Description = "compress the lineage", ValueName = "compress lineage", ShowInHelpText = true)]
         public bool Compress { get; set; } = false;
+        [Option(CommandOptionType.NoValue, ShortName = "l", LongName = "linked-server", Description = "specify if query is towards linked server", ValueName = "is linked server", ShowInHelpText = true)]
+        public bool isLinkedServer { get; set; } = false;
 
         public ParseCmd(ILogger<ParseCmd> logger, IConsole console)
         {
@@ -38,8 +40,15 @@ namespace SQLQueryLineageCLI.Commands
             try
             {
                 ValidateOptions();
+                ParserProperties properties = new ParserProperties()
+                {
+                    defaultDatabase = Database,
+                    defaultSchema = Schema,
+                    compress = Compress,
+                    isLinkedServer = isLinkedServer
+                };
                 string query = File.ReadAllText(FilePath);
-                var parseResult = SQLQueryLineageProgram.GetStatementTargets(query, defaultSchema: Schema, defaultDatabase: Database);
+                var parseResult = SQLQueryLineageProgram.GetStatementTargets(query, properties);
                 if(Compress == true)
                 {
                     ProcParserUtils.CompressLineage(parseResult.ProcedureEvents);
