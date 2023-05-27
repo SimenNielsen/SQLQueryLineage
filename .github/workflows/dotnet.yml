@@ -26,4 +26,4 @@ jobs:
     - name: Build
       run: dotnet build ./SQLQueryLineage/SQLQueryLineage.csproj --no-restore 
     - name: Test
-      run: dotnet test --verbosity normal ./SQLQueryLineage/SQLQueryLineage.sln
+      run: dotnet test --verbosity normal ./SQLQueryLineage.sln
