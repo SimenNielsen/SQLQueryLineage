@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using SQLQueryLineage;
 namespace SQLQueryLineage.Common
 {
     public static class SqlUtils
@@ -17,7 +18,14 @@ namespace SQLQueryLineage.Common
                 string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SOURCE_PASS"))
             )
             {
-                throw new Exception("Environment variables not set. For accurate lineage please provide SOURCE_HOST, SOURCE_PORT, SOURCE_USER and SOURCE_PASS.");
+                if (SQLQueryLineageProgram.properties.failSilent == true)
+                {
+                    return new List<Column>();
+                }
+                else
+                {
+                    throw new Exception("Environment variables not set. For accurate lineage please provide SOURCE_HOST, SOURCE_PORT, SOURCE_USER and SOURCE_PASS.");
+                }
             }
             var result = new List<Column>();
             string queryString = $"select col.name as column_name \r\nfrom sys.tables as tab \r\nleft join sys.columns as col on tab.object_id = col.object_id\r\nwhere tab.name = '{targetTable.tableName}'\r\nunion all\r\nselect col.name as column_name \r\nfrom sys.views as v \r\nleft join sys.columns as col on v.object_id = col.object_id \r\nwhere v.name = '{targetTable.tableName}'";

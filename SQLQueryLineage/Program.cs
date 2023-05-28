@@ -1,13 +1,16 @@
 ﻿using SQLQueryLineage.Common;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
+using System.Runtime.CompilerServices;
 
 namespace SQLQueryLineage;
 public static class SQLQueryLineageProgram
 {
+    public static ParserProperties properties = null;
     public static SQLQueryLineageVisitor GetStatementTargets(string storedProcedureDefinition,
         ParserProperties properties = null)
     {
         if(properties == null) properties = new ParserProperties(); //default properties
+        SQLQueryLineageProgram.properties = properties;
         ProcParserUtils.defaultDatabase = properties.defaultDatabase;
         ProcParserUtils.defaultSchema = properties.defaultSchema;
         if (properties.isLinkedServer == true)
