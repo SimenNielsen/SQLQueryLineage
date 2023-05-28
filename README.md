@@ -22,11 +22,12 @@ sqllineage parse --filepath="D:\dev\sp_sample2.sql" --schema=testschema --databa
 Will parse the file specified with the -file parameter and output the result to the file specified with the -output-file parameter. The -schema and -database parameters are optional and will default to dbo and master respectively.
 
 The json contains a list of events found in a specified file. Event types are:
-* SELECT = 1
-* SELECT INTO = 2
-* INSERT = 3
-* UPDATE = 4
-* EXECUTE = 5
+* SELECT = 0
+* SELECT INTO = 1
+* INSERT = 2
+* UPDATE = 3
+* EXECUTE = 4
+* MERGE = 5
 
 Some queries require a connection string to the query database, e.g. when the upstream is unclear when column alias is not mentioned. To allow connection to a specific database we need to set these 4 environment variables:
 - SOURCE_HOST
