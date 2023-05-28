@@ -597,6 +597,7 @@ public static class ProcParserUtils {
     public static UpstreamReference GetAnyUpstream(string alias, List<UpstreamReference> upstreamList)
     {
         alias = alias.ToLower();
+        // Look for alias
         foreach (var upstream in upstreamList)
         {
             if(upstream.alias != null && upstream.alias == alias)
@@ -604,6 +605,14 @@ public static class ProcParserUtils {
                 return upstream;
             }
             if (upstream.CTEAlias != null && upstream.CTEAlias == alias)
+            {
+                return upstream;
+            }
+        }
+        // Look for actual table names
+        foreach (var upstream in upstreamList.FindAll(x => x.type == UpstreamType.TABLE))
+        {
+            if(upstream.table.tableName == alias)
             {
                 return upstream;
             }
