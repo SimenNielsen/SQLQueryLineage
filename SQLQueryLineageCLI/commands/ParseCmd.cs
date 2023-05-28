@@ -49,7 +49,7 @@ namespace SQLQueryLineageCLI.Commands
                 };
                 string query = File.ReadAllText(FilePath);
                 var parseResult = SQLQueryLineageProgram.GetStatementTargets(query, properties);
-                if(Compress == true)
+                if (Compress == true)
                 {
                     ProcParserUtils.CompressLineage(parseResult.ProcedureEvents);
                 }

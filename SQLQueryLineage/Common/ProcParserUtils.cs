@@ -724,6 +724,11 @@ public static class ProcParserUtils {
             case OpenXmlTableReference oxtr:
                 //TODO:
                 break;
+            case OpenRowsetTableReference ortr:
+                var query = ortr.Query.Value;
+                var result = SQLQueryLineageProgram.GetStatementTargets(query, SQLQueryLineageProgram.properties);
+                SQLQueryLineageProgram.remoteVisitEvents.AddRange(result.ProcedureEvents);
+                break;
             default:
                 throw new NotImplementedException($"TableReferenceWithAlias type not supported: {tableReferenceWithAlias.GetType().Name}");
         }

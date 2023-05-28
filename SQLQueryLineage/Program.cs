@@ -6,6 +6,7 @@ namespace SQLQueryLineage;
 public static class SQLQueryLineageProgram
 {
     public static ParserProperties properties = null;
+    internal static List<ProcedureStatement> remoteVisitEvents = new List<ProcedureStatement>();
     public static SQLQueryLineageVisitor GetStatementTargets(string storedProcedureDefinition,
         ParserProperties properties = null)
     {
@@ -32,7 +33,7 @@ public static class SQLQueryLineageProgram
 
         SQLQueryLineageVisitor sqlVisitor = new SQLQueryLineageVisitor();
         sqlFragment.Accept(sqlVisitor);
-
+        sqlVisitor.ProcedureEvents.AddRange(remoteVisitEvents);
         return sqlVisitor;
     }
 }
