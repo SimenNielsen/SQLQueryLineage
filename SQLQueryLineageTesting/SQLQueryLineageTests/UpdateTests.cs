@@ -19,7 +19,7 @@ namespace SQLQueryLineageTesting.SQLQueryLineageTests
         {
             string query = "UPDATE Per SET Per.PersonCityName=Addr.City, Per.PersonPostCode=Addr.PostCode FROM Persons Per INNER JOIN AddressList Addr ON Per.PersonId = Addr.PersonId";
             SQLQueryLineageVisitor result = SQLQueryLineageProgram.GetStatementTargets(query);
-            Assert.AreEqual(ProcedureStatementType.INSERT, result.ProcedureEvents[0].Type);
+            Assert.AreEqual(ProcedureStatementType.UPDATE, result.ProcedureEvents[0].Type);
         }
         [TestMethod]
         public void AssertUpdateColumnsCount()
