@@ -7,6 +7,7 @@
         public TableAlias tableAlias { get; set; }
         public string? logic { get; set; }
         public List<Column> sourceColumns { get; set; }
+        public string? upstreamReferenceSchema { get; set; }
         public string? upstreamReferenceAlias { get; set; }
 
         public Column(string name, string? alias = null, string? logic = null, TableAlias tableAlias = null)
@@ -29,6 +30,10 @@
         public void SetSourceColumns(List<Column> sourceColumns)
         {
             this.sourceColumns = sourceColumns;
+        }
+        public bool isBlank()
+        {
+            return this.name == null && this.alias == null && this.logic == null;
         }
     }
 }

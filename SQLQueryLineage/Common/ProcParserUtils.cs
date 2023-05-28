@@ -78,15 +78,28 @@ public static class ProcParserUtils {
 
     public static UpstreamReference GetColumnUpstreamReference(List<UpstreamReference> upstreamList, Column column)
     {
+        if (column.sourceColumns.Count > 0)
+        {
+            return null; // Column originates from subcolumns
+        }
+        if (column.logic != null)
+        {
+            // TODO: Implement logic parsing. E.g. RANK() OVER()
+            return null; 
+        }
         if(upstreamList.Count == 1)
         {
             return upstreamList[0];
         }
         else
         {
-            if(column.upstreamReferenceAlias != null)
+            if(column.upstreamReferenceAlias != null && column.upstreamReferenceSchema != null)
             {
-                return upstreamList.Find(x => x.alias == column.upstreamReferenceAlias.ToLower());
+                return upstreamList.Find(x => x.table.schemaName == column.upstreamReferenceSchema && x.table.tableName == column.upstreamReferenceAlias);
+            }
+            else if (column.upstreamReferenceAlias != null)
+            {
+                return upstreamList.Find(x => x.alias == column.upstreamReferenceAlias);
             }
             else
             {
@@ -348,7 +361,14 @@ public static class ProcParserUtils {
             case CoalesceExpression ce:
                 foreach(var c in ce.Expressions)
                 {
-                    columns = GetScalarExpressionColumns(c, lineage);
+                    var subCols = GetScalarExpressionColumns(c, lineage);
+                    foreach(var col in subCols)
+                    {
+                        if(col.isBlank() == false)
+                        {
+                            columns.Add(col);
+                        }
+                    }
                 }
                 break;
             case IdentityFunctionCall ifc:
@@ -435,9 +455,14 @@ public static class ProcParserUtils {
         var column = new Column(
             columnName
         );
-        if(columnParts.Count == 2)
+        if(columnParts.Count > 2)
         {
-            column.upstreamReferenceAlias = columnParts[0].Value.ToLower();
+            column.upstreamReferenceSchema = columnParts[columnParts.Count-3].Value.ToLower();
+            column.upstreamReferenceAlias = columnParts[columnParts.Count-2].Value.ToLower();
+        }
+        else if (columnParts.Count > 1)
+        {
+            column.upstreamReferenceAlias = columnParts[columnParts.Count - 2].Value.ToLower();
         }
         return column;
     }
