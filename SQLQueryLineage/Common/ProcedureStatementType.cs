@@ -6,6 +6,7 @@
         SELECT_INTO,
         INSERT,
         UPDATE,
-        EXECUTE
+        EXECUTE,
+        MERGE
     }
 }

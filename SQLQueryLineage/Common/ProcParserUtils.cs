@@ -1,3 +1,4 @@
+using System;
 using System.Data.Common;
 using System.Text;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
@@ -276,6 +277,9 @@ public static class ProcParserUtils {
                 targetColumn.SetSourceColumns(sourceColumns);
                 result = targetColumn;
                 break;
+            default:
+                throw new NotSupportedException($"SetClause type not supported: {setClause.GetType().Name}");
+                break;
         }
         return result;
     }
@@ -531,7 +535,41 @@ public static class ProcParserUtils {
         var tableReferenceLineage = joinParenthesisTableReference.Join;
         return lineage;
     }
-
+    public static TableAlias GetTableReferenceTableAlias(TableReference tableReference, TableLineage lineage)
+    {
+        TableAlias result = null;
+        switch (tableReference)
+        {
+            case NamedTableReference ntr:
+                var alias = ntr.Alias?.Value;
+                if (alias != null)
+                {
+                    var existingUpstream = ProcParserUtils.GetTableUpstream(alias, lineage);
+                    if (existingUpstream != null)
+                    {
+                        result = existingUpstream.table;
+                    }
+                }
+                else
+                {
+                    //table name might still be alias
+                    var schemaObject = ntr.SchemaObject;
+                    var existingUpstream = ProcParserUtils.GetTableUpstream(schemaObject.BaseIdentifier.Value, lineage);
+                    if (existingUpstream != null)
+                    {
+                        result = existingUpstream.table;
+                    }
+                    else
+                    {
+                        result = ProcParserUtils.GetSchemaObjectTable(schemaObject, lineage, alias: alias);
+                    }
+                }
+                break;
+            default:
+                throw new NotSupportedException($"TableReference type not supported: {tableReference.GetType().Name}");
+        }
+        return result;
+    }
     public static TableLineage GetTableReferenceLineage(TableReference tableReference, TableLineage lineage){
         switch (tableReference)
         {
@@ -693,6 +731,65 @@ public static class ProcParserUtils {
         //AddUpstreamReferenceTableIfNotExists(tableAlias, lineage);
         return lineage;
     }
+    public static List<Column> GetActionClauseTargetColumns(MergeActionClause action, TableLineage lineage)
+    {
+        var result = new List<Column>();
+        switch (action.Action)
+        {
+            case UpdateMergeAction uma:
+                var setClauses = uma.SetClauses;
+                foreach (var clause in setClauses)
+                {
+                    var column = ProcParserUtils.GetSetClauseColumn(clause, lineage);
+                    result.Add(column);
+                }
+                break;
+            case InsertMergeAction ima:
+                var targetCols = ima.Columns;
+                if (targetCols.Count == 0)
+                {
+                    // Set all columns as target
+                    result = SqlUtils.ReadTableColumnsData(lineage.target);
+                }
+                else
+                {
+                    foreach (var tcol in targetCols)
+                    {
+                        var parsedCol = ProcParserUtils.GetColumnReferenceExpressionColumn(tcol, lineage);
+                        result.Add(parsedCol);
+                    }
+                }
+                var source = ProcParserUtils.GetValuesInsertSource(ima.Source, lineage);
+                if (result.Count == source.Count)
+                {
+                    for (var i = 0; i < result.Count; i++)
+                    {
+                        result[i].AddSourceColumn(source[i]);
+                    }
+                }
+                break;
+            case DeleteMergeAction dma:
+                break;
+            default:
+                throw new NotSupportedException($"MergeActionClause type not supported: {action.Action.GetType().Name}");
+                break;
+        }
+        return result;
+    }
+    public static List<Column> GetValuesInsertSource(ValuesInsertSource valuesInsertSource, TableLineage lineage)
+    {
+        var result = new List<Column>();
+        foreach(var row in valuesInsertSource.RowValues)
+        {
+            var columns = row.ColumnValues;
+            foreach(var col in columns)
+            {
+                var parsedCol = GetScalarExpressionColumns(col, lineage);
+                result.AddRange(parsedCol);
+            }
+        }
+        return result;
+    }
 
     public static TableLineage GetInsertSource(InsertSource source, TableLineage lineage)
     {
@@ -700,9 +797,9 @@ public static class ProcParserUtils {
         {
             case SelectInsertSource selectInsertSource:
                 return ProcParserUtils.GetQueryExpressionLineage(selectInsertSource.Select, lineage);
-            case ValuesInsertSource valuesInsertSource:
-                // Value rows unhandled
-                return lineage;
+            //case ValuesInsertSource valuesInsertSource:
+            //    // Value rows unhandled
+            //    return lineage;
             //return ProcParserUtils.GetQueryExpressionLineage(valuesInsertSource.Select, lineage);
             case ExecuteInsertSource eis:
                 return lineage;

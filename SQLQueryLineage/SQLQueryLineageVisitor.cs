@@ -54,4 +54,13 @@ public class SQLQueryLineageVisitor : TSqlFragmentVisitor
         }
         base.ExplicitVisit(node);
     }
+    public override void ExplicitVisit(MergeStatement node)
+    {
+        var statement = Parsers.ParseMerge(node);
+        if (statement != null)
+        {
+            ProcedureEvents.Add(statement);
+        }
+        base.ExplicitVisit(node);
+    }
 }

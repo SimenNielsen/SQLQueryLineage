@@ -44,37 +44,8 @@ public static class Parsers
             TableLineage lineage = new TableLineage();
             lineage.ctes = ctes;
             lineage = ProcParserUtils.GetInsertSource(source, lineage);
-            var target = insertStatement.InsertSpecification.Target;
-            switch (target)
-            {
-                case NamedTableReference ntr:
-                    var alias = ntr.Alias?.Value;
-                    if (alias != null)
-                    {
-                        var existingUpstream = ProcParserUtils.GetTableUpstream(alias, lineage);
-                        if (existingUpstream != null)
-                        {
-                            lineage.target = existingUpstream.table;
-                        }
-                    }
-                    else
-                    {
-                        //table name might still be alias
-                        var schemaObject = ntr.SchemaObject;
-                        var existingUpstream = ProcParserUtils.GetTableUpstream(schemaObject.BaseIdentifier.Value, lineage);
-                        if (existingUpstream != null)
-                        {
-                            lineage.target = existingUpstream.table;
-                        }
-                        else
-                        {
-                            lineage.target = ProcParserUtils.GetSchemaObjectTable(schemaObject, lineage, alias: alias);
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
+            var target = ProcParserUtils.GetTableReferenceTableAlias(insertStatement.InsertSpecification.Target, lineage);
+            lineage.target = target;
             var targetColumns = insertStatement.InsertSpecification.Columns;
             if (targetColumns.Count == 0)
             {
@@ -114,36 +85,12 @@ public static class Parsers
             {
                 lineage = ProcParserUtils.GetFromClauseLineage(updateStatement.UpdateSpecification.FromClause, lineage);
             }
-            var target = updateStatement.UpdateSpecification.Target;
-            switch (target)
+            // Target might be alias set in the FromClause.
+            var target = ProcParserUtils.GetTableReferenceTableAlias(updateStatement.UpdateSpecification.Target, lineage);
+            lineage.target = target;
+            if (fromClause == null) // Target may act as an upstream source if the from clause is empty.
             {
-                case NamedTableReference ntr:
-                    var alias = ntr.Alias?.Value;
-                    if (alias != null)
-                    {
-                        var existingUpstream = ProcParserUtils.GetTableUpstream(alias, lineage);
-                        if (existingUpstream != null)
-                        {
-                            lineage.target = existingUpstream.table;
-                        }
-                    }
-                    else
-                    {
-                        //table name might still be alias
-                        var schemaObject = ntr.SchemaObject;
-                        var existingUpstream = ProcParserUtils.GetTableUpstream(schemaObject.BaseIdentifier.Value, lineage);
-                        if (existingUpstream != null)
-                        {
-                            lineage.target = existingUpstream.table;
-                        }
-                        else
-                        {
-                            lineage.target = ProcParserUtils.GetSchemaObjectTable(schemaObject, lineage, alias: alias);
-                        }
-                    }
-                    break;
-                default:
-                    throw new NotSupportedException();
+                ProcParserUtils.AddUpstreamReferenceTableIfNotExists(target, lineage);
             }
             var setClauses = updateStatement.UpdateSpecification.SetClauses;
             foreach (var setclause in setClauses)
@@ -177,6 +124,33 @@ public static class Parsers
                     procedureStatement.SetTarget(tableAlias);
                     break;
             }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        return procedureStatement;
+    }
+    public static ProcedureStatement? ParseMerge(MergeStatement mergeStatement)
+    {
+        var procedureStatement = new ProcedureStatement(ProcedureStatementType.MERGE);
+        try
+        {
+            List<UpstreamReference> ctes = ProcParserUtils.GetCommonTableExpressionLineage(mergeStatement.WithCtesAndXmlNamespaces);
+            TableLineage lineage = new TableLineage();
+            lineage.ctes = ctes;
+            var sourceLineage = ProcParserUtils.GetTableReferenceLineage(mergeStatement.MergeSpecification.TableReference, lineage);
+            var target = ProcParserUtils.GetTableReferenceTableAlias(mergeStatement.MergeSpecification.Target, lineage);
+            lineage.target = target;
+            var actions = mergeStatement.MergeSpecification.ActionClauses;
+            var targetColumns = new List<Column>();
+            foreach (var action in actions)
+            {
+                var parsedColumns = ProcParserUtils.GetActionClauseTargetColumns(action, lineage);
+                targetColumns.AddRange(parsedColumns);
+            }
+            targetColumns.ForEach(c => { procedureStatement.AddColumn(c); });
+            procedureStatement.SetTarget(lineage.target);
         }
         catch (Exception ex)
         {
