@@ -3,6 +3,8 @@
 
 This project is a .NET console application that parses MS SQL stored procedures and generates column-level lineage in JSON format. The tool extracts information from the stored procedures and outputs a JSON file that contains information about the columns and their dependencies.
 
+Be sure to check out the [demo](https://www.sqlparsing.com/).
+
 ## Table of Contents
 - [Installation](https://github.com/SimenNielsen/SQLQueryLineage#installation)
 - [Usage](https://github.com/SimenNielsen/SQLQueryLineage#usage)
